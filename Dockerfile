@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip uninstall -y tensorboard tensorboard-data-server tb-nightly || true
+RUN pip uninstall -y triton pytorch-triton || true
 
 # Copy all source files
 COPY . .
@@ -20,6 +22,6 @@ COPY . .
 RUN chmod +x start.sh
 
 # FastAPI port
-EXPOSE 8000
+EXPOSE 7860
 
 CMD ["./start.sh"]
