@@ -12,6 +12,17 @@ from datetime import datetime
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+# ── Start the live trading system (scanner + alerts + API) ─────────────────────
+# st.cache_resource ensures this runs ONCE per server process, no matter how
+# many browser tabs/visitors load the page.
+@st.cache_resource
+def _boot_live_system():
+    from zoro.live_runner import start_live_system
+    start_live_system()
+    return True
+
+_boot_live_system()
+
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="ZORO — KATANA Terminal",
@@ -386,7 +397,7 @@ with st.sidebar:
                 color:#8b0000;letter-spacing:2px;margin-bottom:0.5rem">
     ⚔ ZORO CONTROLS
     </div>""", unsafe_allow_html=True)
-    auto_refresh = st.toggle("Auto-refresh (60s)", value=False)
+    auto_refresh = st.toggle("Auto-refresh (60s)", value=True)
     if auto_refresh:
         st.markdown("""<div style="font-family:'Share Tech Mono',monospace;
                     font-size:0.68rem;color:#444">

@@ -1,0 +1,34 @@
+{
+  "symbol": "ETH-USD",
+  "direction": "FLAT",
+  "action": "HOLD",
+  "price": 2029.699951171875,
+  "confidence": 44,
+  "rsi": 67.96075562952956,
+  "lstm_prob": 0.5085148811340332,
+  "sentiment": -0.18720170017331839,
+  "feature_contributions": [
+    {
+      "feature": "trend",
+      "label": "Trend (SMA)",
+      "pct": 90.9,
+      "description": "downtrend (SMA20 < SMA50)",
+      "bullish": false
+    },
+    {
+      "feature": "sentiment",
+      "label": "FinBERT Sentiment",
+      "pct": 9.1,
+      "description": "bearish news sentiment",
+      "bullish": false
+    }
+  ],
+  "dominant_reason": "downtrend (SMA20 < SMA50)",
+  "human_explanation": "Bot HOLD ETH-USD at $2,029.70 [conf=44/100] because: Trend (SMA) (90.9%: downtrend (SMA20 < SMA50)) \u00b7 FinBERT Sentiment (9.1%: bearish news sentiment)",
+  "gates": [
+    "SMC bullish structure",
+    "FinBERT bearish (-0.19) -1pts",
+    "RL BUY (disagrees)"
+  ],
+  "method": "gate_analysis"
+}

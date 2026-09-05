@@ -26,11 +26,9 @@ _engine: Optional[Engine] = None
 def get_engine() -> Engine:
     global _engine
     if _engine is None:
-        url = os.environ.get(
-            "DATABASE_URL",
-            "postgresql://zoro:zoro@localhost:5432/zorodb",
-        )
-        _engine = create_engine(url, pool_pre_ping=True, future=True)
+        url = os.environ.get("DATABASE_URL", "sqlite:///zoro_live.db")
+        connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
+        _engine = create_engine(url, pool_pre_ping=True, future=True, connect_args=connect_args)
     return _engine
 
 
@@ -128,14 +126,14 @@ def fetch_pnl_summary() -> list[dict]:
         sql = text("""
             SELECT
                 coin,
-                COUNT(*)                                      AS total_trades,
-                ROUND(SUM(pnl)::numeric, 4)                  AS total_pnl,
-                ROUND(AVG(pnl)::numeric, 4)                  AS avg_pnl,
+                COUNT(*)                                                  AS total_trades,
+                ROUND(SUM(pnl), 4)                                        AS total_pnl,
+                ROUND(AVG(pnl), 4)                                        AS avg_pnl,
                 ROUND(
-                    100.0 * COUNT(*) FILTER (WHERE pnl > 0)
-                    / NULLIF(COUNT(*) FILTER (WHERE pnl IS NOT NULL), 0),
+                    100.0 * SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END)
+                    / NULLIF(SUM(CASE WHEN pnl IS NOT NULL THEN 1 ELSE 0 END), 0),
                     1
-                )                                             AS win_rate_pct
+                )                                                         AS win_rate_pct
             FROM trades
             WHERE action = 'CLOSE'
             GROUP BY coin

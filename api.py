@@ -116,9 +116,12 @@ def get_signal(symbol: Optional[str] = Query(None, description="e.g. BNB-USD")):
                 rows = conn.execute(sql, {"sym": symbol}).mappings().all()
             else:
                 sql = text("""
-                    SELECT DISTINCT ON (symbol) *
-                    FROM signals
-                    ORDER BY symbol, timestamp DESC
+                    SELECT s.* FROM signals s
+                    INNER JOIN (
+                        SELECT symbol, MAX(timestamp) AS max_ts
+                        FROM signals GROUP BY symbol
+                    ) latest
+                    ON s.symbol = latest.symbol AND s.timestamp = latest.max_ts
                 """)
                 rows = conn.execute(sql).mappings().all()
         return _clean([dict(r) for r in rows])
