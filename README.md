@@ -23,8 +23,9 @@ Built from scratch across 8 upgrade phases — from a simple RSI script to a pro
 👉 [huggingface.co/spaces/shivams496/Zoro-crypto-bot](https://huggingface.co/spaces/shivams496/Zoro-crypto-bot)
 
 **What you'll see:**
+
 - Live BNB SHORT signal fired (RSI 99.3, conf 73/100)
-- Walk-forward validation results (53.8% → 55.4% directional accuracy)
+- LSTM walk-forward validation across test windows (see `retrain_report.txt` for exact per-window figures)
 - SHAP explainability — why the bot made each decision
 - Strategy comparison: RL Agent vs LSTM vs RSI vs Buy-and-Hold
 
@@ -34,34 +35,45 @@ Built from scratch across 8 upgrade phases — from a simple RSI script to a pro
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    ZORO SYSTEM                          │
-├──────────────┬──────────────┬──────────────────────────┤
-│   Data Layer │   AI Layer   │      Execution Layer      │
-│              │              │                           │
-│  yfinance    │  LSTM 3-layer│  7-Gate Signal Engine     │
-│  Binance WS  │  PPO RL Agent│  RSI 25/75 thresholds     │
-│  FinBERT RSS │  SHAP Explain│  ATR stop-loss            │
-│  PostgreSQL  │  54% accuracy│  Trailing stop 1.5%       │
-└──────────────┴──────────────┴──────────────────────────┤
-│                   API + Dashboard                        │
-│   FastAPI :8000  ·  Streamlit KATANA  ·  Hugging Face  │
+│                    ZORO SYSTEM                           │
+├──────────────┬──────────────┬────────────────────────────┤
+│   Data Layer │   AI Layer   │      Execution Layer        │
+│              │              │                              │
+│  yfinance    │  LSTM 3-layer│  7-Gate Signal Engine        │
+│  Binance WS  │  PPO RL Agent│  RSI 25/75 thresholds        │
+│  FinBERT RSS │  SHAP Explain│  ATR stop-loss               │
+│  PostgreSQL  │  53% accuracy│  Trailing stop 1.5%          │
+├──────────────┴──────────────┴────────────────────────────┤
+│                   API + Dashboard                          │
+│   FastAPI :8000  ·  Streamlit KATANA  ·  Hugging Face      │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Key Results (Honest Numbers)
+## Key Results (Honest Numbers — Phase 2 Retraining)
 
-| Metric | Value | Notes |
-|--------|-------|-------|
-| LSTM Accuracy | 54% | Walk-forward validated, no lookahead bias |
-| RL Win Rate | 64.8% | PPO 200k steps |
-| RL Alpha vs B&H | +18.2% | Bear market year |
-| BNB Backtest Return | +16.9% | Only profitable coin |
-| Signal Threshold | 70/100 | 7-gate confidence score |
-| Coins Traded | 5 | ETH, BTC, SOL, BNB, ADA |
+| Metric           | Value  | Notes                                      |
+| ---------------- | ------ | ------------------------------------------- |
+| LSTM Accuracy    | 53.3%  | Walk-forward validated, no lookahead bias  |
+| RL Avg Win Rate  | 85.3%  | Across 5 coins, PPO 300k steps             |
+| RL Avg Sharpe    | 1.21   | Per-trade Sharpe, not annualized (honest)  |
+| Signal Threshold | 70/100 | 7-gate confidence score                    |
+| Coins Traded     | 5      | ETH, BTC, SOL, BNB, ADA                    |
 
-> **Why 54% and not 90%?** Because 90% would be fake. Real crypto AI is hard. A consistent 54% directional edge with proper risk management is actually profitable — walk-forward windows confirm no overfitting.
+> **Why 53% and not 90%?** Because 90% would be fake. Real crypto AI is hard. A consistent edge over the 50% random-guess baseline, combined with proper risk management, is what makes a strategy viable — walk-forward windows confirm this isn't overfitting to one historical period.
+
+### RL Agent — Per-Coin Evaluation (Phase 2, honest Sharpe)
+
+| Coin | Win Rate | Sharpe | Trades |
+| ---- | -------- | ------ | ------ |
+| ETH  | 88.1%    | 1.211  | 67     |
+| BTC  | 88.1%    | 1.105  | 42     |
+| SOL  | 84.4%    | 0.979  | 45     |
+| BNB  | 97.6%    | 2.465  | 84     |
+| ADA  | 68.2%    | 0.277  | 66     |
+
+> Sharpe here is per-trade (not annualized). An earlier evaluation had a bug that over-annualized returns, producing impossible values (e.g. Sharpe of 873). These are the corrected, honest figures. Walk-forward validation also showed one training window where the agent placed zero trades across all coins — noted here for transparency, not yet root-caused.
 
 ---
 
@@ -69,44 +81,45 @@ Built from scratch across 8 upgrade phases — from a simple RSI script to a pro
 
 Every trade requires passing a confidence score ≥ 70/100:
 
-| Gate | Signal | Weight |
-|------|--------|--------|
-| RSI (25/75) | Oversold/Overbought | ±20 pts |
-| SMC / Price vs SMA20 | Structure | ±10 pts |
-| MACD Histogram | Momentum | ±10 pts |
-| Bollinger Bands | Volatility | ±15 pts |
-| LSTM Neural Net | 4H prediction | ±15 pts |
-| FinBERT Sentiment | News NLP | ±10 pts |
-| Volume Ratio | Confirmation | ±5 pts |
+| Gate                 | Signal               | Weight  |
+| --------------------- | --------------------- | -------- |
+| RSI (25/75)          | Oversold/Overbought  | ±20 pts |
+| SMC / Price vs SMA20 | Structure             | ±10 pts |
+| MACD Histogram       | Momentum              | ±10 pts |
+| Bollinger Bands      | Volatility            | ±15 pts |
+| LSTM Neural Net      | 4H prediction         | ±15 pts |
+| FinBERT Sentiment    | News NLP              | ±10 pts |
+| Volume Ratio         | Confirmation          | ±5 pts  |
 
 ---
 
 ## Upgrade History
 
-| Upgrade | Feature | Status |
-|---------|---------|--------|
-| A | LSTM 3-layer neural network (60h sequence) | ✅ |
-| B | Backtesting with vectorbt (1yr ETH+BTC) | ✅ |
-| C | Paper trading on Binance Testnet | ✅ |
-| D | PPO Reinforcement Learning Agent (200k steps) | ✅ |
-| E | KATANA Dashboard (Streamlit, Crimson theme) | ✅ |
-| F | Short selling + ATR stop-loss + trailing stop | ✅ |
-| G | Telegram alerts + 5-coin expansion | ✅ |
-| H | Full backtest all 5 coins (real results) | ✅ |
+| Upgrade | Feature                                                  | Status |
+| ------- | --------------------------------------------------------- | ------ |
+| A       | LSTM 3-layer neural network (60h sequence)               | ✅     |
+| B       | Backtesting with vectorbt (1yr ETH+BTC)                  | ✅     |
+| C       | Paper trading on Binance Testnet                         | ✅     |
+| D       | PPO Reinforcement Learning Agent (200k steps)            | ✅     |
+| E       | KATANA Dashboard (Streamlit, Crimson theme)              | ✅     |
+| F       | Short selling + ATR stop-loss + trailing stop            | ✅     |
+| G       | Telegram alerts + 5-coin expansion                       | ✅     |
+| H       | Full backtest all 5 coins (real results)                 | ✅     |
+| I       | Phase 2 honest retraining — fixed Sharpe evaluation bug  | ✅     |
 
 ---
 
-## Backtest Results (Upgrade H — All 5 Coins)
+## Earlier Backtest (Upgrade H — vectorbt, separate pipeline)
 
-| Coin | Return | Trades | Win Rate | Max Drawdown |
-|------|--------|--------|----------|--------------|
-| ETH | -15.3% | 65 | 58.5% | -45.3% |
-| BTC | -14.1% | 70 | 54.3% | -39.8% |
-| SOL | -12.0% | 78 | 62.8% | -46.5% |
-| **BNB** | **+16.9%** | 71 | 64.8% | -31.2% |
-| ADA | -61.2% | 75 | 53.3% | -69.0% |
+| Coin    | Return     | Trades | Win Rate | Max Drawdown |
+| ------- | ---------- | ------ | -------- | ------------- |
+| ETH     | -15.3%     | 65     | 58.5%    | -45.3%        |
+| BTC     | -14.1%     | 70     | 54.3%    | -39.8%        |
+| SOL     | -12.0%     | 78     | 62.8%    | -46.5%        |
+| **BNB** | **+16.9%** | 71     | 64.8%    | -31.2%        |
+| ADA     | -61.2%     | 75     | 53.3%    | -69.0%        |
 
-> Long-only weakness fixed in Upgrade F with short selling. RL Agent beats all strategies with +18.2% alpha vs Buy-and-Hold.
+> This backtest uses a different evaluation pipeline (`backtest_runner.py` / vectorbt) than the RL Agent table above, run in an earlier phase, and has not been re-audited alongside the Phase 2 Sharpe fix. Treat these figures independently from the "Key Results" section above rather than as directly comparable.
 
 ---
 
@@ -131,11 +144,11 @@ ZORO-Crypto-Bot/
 ├── train_rl_agent.py        # PPO training script
 ├── retrain_lstm.py          # LSTM retraining script
 ├── backtest_runner.py       # Vectorbt backtest runner
-├── gym_env.py               # Custom Gym environment
-├── Dockerfile               # Container config
-├── docker-compose.yml       # PostgreSQL + app stack
-├── requirements.txt         # All dependencies
-└── .env.example             # Credentials template
+├── gym_env.py                # Custom Gym environment
+├── Dockerfile                # Container config
+├── docker-compose.yml         # PostgreSQL + app stack
+├── requirements.txt           # All dependencies
+└── .env.example                # Credentials template
 ```
 
 ---
@@ -143,6 +156,7 @@ ZORO-Crypto-Bot/
 ## Quick Start
 
 ### Option 1 — Hugging Face (no setup needed)
+
 Visit the live demo directly: [huggingface.co/spaces/shivams496/Zoro-crypto-bot](https://huggingface.co/spaces/shivams496/Zoro-crypto-bot)
 
 ### Option 2 — Local with Docker
@@ -187,16 +201,16 @@ DATABASE_URL=postgresql://zoro:zoro@localhost:5432/zorodb
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Language | Python 3.12 |
-| AI/ML | TensorFlow/Keras, Stable-Baselines3 (PPO), SHAP |
-| NLP | FinBERT (HuggingFace Transformers) |
-| Data | yfinance, Binance WebSocket, VADER |
-| Backend | FastAPI, SQLAlchemy, PostgreSQL |
-| Dashboard | Streamlit (KATANA theme) |
-| Deployment | Docker, Hugging Face Spaces |
-| Exchange | Binance Testnet (paper money only) |
+| Layer      | Technology                                       |
+| ---------- | ------------------------------------------------- |
+| Language   | Python 3.12                                      |
+| AI/ML      | TensorFlow/Keras, Stable-Baselines3 (PPO), SHAP  |
+| NLP        | FinBERT (HuggingFace Transformers)               |
+| Data       | yfinance, Binance WebSocket, VADER               |
+| Backend    | FastAPI, SQLAlchemy, PostgreSQL                  |
+| Dashboard  | Streamlit (KATANA theme)                         |
+| Deployment | Docker, Hugging Face Spaces                      |
+| Exchange   | Binance Testnet (paper money only)               |
 
 ---
 
@@ -206,4 +220,4 @@ DATABASE_URL=postgresql://zoro:zoro@localhost:5432/zorodb
 
 ---
 
-**Builder:** Shivam (ZORO) · **Status:** Phase 4 Complete · **Exchange:** Binance Testnet only
+**Builder:** Shivam (ZORO) · **Status:** Phase 4 Complete (Phase 2 honest retraining applied) · **Exchange:** Binance Testnet only
