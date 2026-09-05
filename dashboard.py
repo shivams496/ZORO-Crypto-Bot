@@ -399,8 +399,12 @@ def api_trades(limit=50):
         pass
     return [], False
 
-@st.cache_data(ttl=30)
+@st.cache_data(ttl=180)
 def api_explain(symbol="BNB-USD"):
+    """Calls the REAL 7-gate engine (run_signal_engine) via /explain — this is
+    the only endpoint that computes a fresh signal (LSTM + FinBERT + RL + SHAP).
+    /signal only reads a cache, so it is not used for live signal generation here.
+    Cached 3 min since this is expensive (model load + SHAP + live FinBERT fetch)."""
     try:
         r = _req.get(f"{API_BASE}/explain", params={"symbol": symbol}, timeout=45)
         if r.ok: return r.json()
@@ -411,6 +415,17 @@ def api_explain(symbol="BNB-USD"):
 def api_status():
     try:
         r = _req.get(f"{API_BASE}/status", timeout=3)
+        if r.ok: return r.json()
+    except Exception: pass
+    return None
+
+@st.cache_data(ttl=30)
+def api_backtest():
+    """Real endpoint from api.py — NOTE: despite the name, this is LIVE paper
+    trading P&L from PostgreSQL, not a historical simulation (api.py says so
+    explicitly). Kept separate from the historical vectorbt bt_raw table."""
+    try:
+        r = _req.get(f"{API_BASE}/backtest", timeout=5)
         if r.ok: return r.json()
     except Exception: pass
     return None
@@ -602,12 +617,15 @@ with t1:
 # TAB 2 — SIGNALS
 # ══════════════════════════════════════════════════════════════════════════════
 with t2:
-    st.markdown('<div class="st2">7-GATE SIGNAL ENGINE — LIVE SCAN</div>', unsafe_allow_html=True)
-
-    r_btn = st.button("🔄  REFRESH ALL SIGNALS")
-    if r_btn:
-        st.cache_data.clear()
-        st.rerun()
+    # ── Section A: cheap local pre-screen (indicators only, no models) ────────
+    st.markdown('<div class="st2">QUICK SCAN — LOCAL INDICATORS ONLY (RSI / MACD / BB)</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="stale-box">
+    This row is a fast, free preview computed locally from price data alone — it does
+    NOT include LSTM, FinBERT sentiment, or the RL agent, and its confidence score is
+    a simplified approximation, not the real 7-gate engine's output. Use it to spot
+    which coins are worth running the full engine on below.
+    </div>""", unsafe_allow_html=True)
 
     for sym, ticker in COINS.items():
         _d = all_data.get(sym)
@@ -644,25 +662,59 @@ with t2:
                 st.markdown(f"<div style='font-family:Share Tech Mono,monospace;font-size:0.7rem;padding-top:11px;line-height:1.5'>{g_str}</div>", unsafe_allow_html=True)
             st.markdown("<hr style='border:none;border-top:1px solid #111;margin:0.4rem 0'>", unsafe_allow_html=True)
 
+    # ── Section B: the REAL 7-gate engine, on demand per coin ──────────────────
+    st.markdown('<div class="st2">FULL 7-GATE SIGNAL (LIVE — RSI · SMC · MACD · BB · LSTM · FINBERT · RL)</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="info-box">
+    This calls the real <code>run_signal_engine()</code> via the <code>/explain</code> endpoint —
+    the same engine <code>trader.py</code> uses to actually trade. It loads the LSTM model,
+    fetches live FinBERT sentiment, and runs the RL agent, so a single coin can take up to
+    ~45 seconds. Requires <code>api.py</code> + the <code>zoro</code> package running with model
+    files present — not just a static file server.
+    </div>""", unsafe_allow_html=True)
+
+    sig_col1, sig_col2 = st.columns([1, 3])
+    with sig_col1:
+        full_scan_coin = st.selectbox("Coin", list(COINS.keys()), format_func=lambda x: COINS[x], key="full_scan_coin")
+        run_full = st.button("⚔ RUN FULL SIGNAL ENGINE")
+
+    if run_full:
+        with st.spinner(f"Running LSTM + FinBERT + RL for {COINS[full_scan_coin]}… up to 45s"):
+            full_sig = api_explain(full_scan_coin)
+        if full_sig and "error" not in full_sig:
+            direction_f = full_sig.get("direction", "FLAT")
+            conf_f = full_sig.get("confidence", 0)
+            price_f = float(full_sig.get("price", 0))
+            gates_f = full_sig.get("gates", [])
+            dir_color_f = "#00ff88" if direction_f == "LONG" else "#dc143c" if direction_f == "SHORT" else "#888"
+            st.markdown(f"""
+            <div class="mc" style="border-top-color:{dir_color_f}">
+                <div class="mc-label">{COINS[full_scan_coin]} — FULL ENGINE RESULT</div>
+                <div class="mc-value" style="color:{dir_color_f};font-size:1.3rem">{direction_f} @ ${price_f:,.2f} &nbsp;·&nbsp; {conf_f}/100</div>
+                <div class="mc-sub">{" &nbsp;·&nbsp; ".join(gates_f) if gates_f else "no gates fired"}</div>
+            </div>""", unsafe_allow_html=True)
+            explanation_f = full_sig.get("human_explanation", "")
+            if explanation_f:
+                st.markdown(f'<div class="info-box">{explanation_f}</div>', unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class="warn-box">
+            No response from the full signal engine. Make sure <code>uvicorn api:app --port 8000</code>
+            is running and the LSTM model / RL agent files are present alongside it.
+            </div>""", unsafe_allow_html=True)
+
     # Gate weight table
-    st.markdown('<div class="st2">GATE WEIGHTS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="st2">GATE WEIGHTS (from zoro/signals.py)</div>', unsafe_allow_html=True)
     gate_df = pd.DataFrame([
         ["1","RSI (25/75)","Oversold / Overbought","±20 pts"],
         ["2","SMC / SMA Structure","Trend alignment","±10 pts"],
         ["3","MACD Histogram","Momentum direction","±10 pts"],
         ["4","Bollinger Bands","Volatility extremes","±10 pts"],
         ["5","LSTM Neural Net","4H price prediction","±20 pts"],
-        ["6","FinBERT Sentiment","News NLP score","±10 pts"],
+        ["6","FinBERT Sentiment","News NLP score","±10 pts (±10 max)"],
         ["7","RL PPO Agent","Reinforcement signal","±10 pts"],
     ], columns=["#","Gate","Signal","Weight"])
     st.dataframe(gate_df, use_container_width=True, hide_index=True)
-
-    st.markdown("""
-    <div class="stale-box">
-    NOTE: this tab's signal engine currently runs a local rule-based <code>signal()</code>
-    function with a placeholder LSTM probability, rather than calling the real
-    <code>/signal</code> endpoint in <code>api.py</code>. Pending: rewire once api.py routes are confirmed.
-    </div>""", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -746,12 +798,31 @@ with t3:
 # TAB 4 — BACKTEST
 # ══════════════════════════════════════════════════════════════════════════════
 with t4:
-    st.markdown('<div class="st2">UPGRADE H — BACKTEST ALL 5 COINS (1 YEAR, VECTORBT PIPELINE)</div>', unsafe_allow_html=True)
+    # ── Section A: REAL live paper-trading P&L (from /backtest — misleadingly
+    # named in api.py, but its own docstring confirms it's live DB data) ───────
+    st.markdown('<div class="st2">LIVE PAPER-TRADING P&L (REAL — FROM POSTGRESQL, NOT A SIMULATION)</div>', unsafe_allow_html=True)
+    live_bt = api_backtest()
+    if live_bt and live_bt.get("coins"):
+        st.markdown(f'<span class="live-pill"><span class="live-dot" style="width:6px;height:6px"></span>LIVE — generated {live_bt.get("generated_at","")[:19]}</span>', unsafe_allow_html=True)
+        live_bt_df = pd.DataFrame(live_bt["coins"])
+        st.dataframe(live_bt_df, width='stretch', hide_index=True)
+    else:
+        st.markdown("""
+        <div class="warn-box">
+        No live P&L data yet — this needs <code>trader.py</code> running and writing trades
+        to PostgreSQL. Until then there's nothing real to show here (no placeholder numbers
+        are substituted).
+        </div>""", unsafe_allow_html=True)
+
+    st.markdown('<div class="st2">UPGRADE H — HISTORICAL BACKTEST ALL 5 COINS (1 YEAR, VECTORBT PIPELINE)</div>', unsafe_allow_html=True)
     st.markdown("""
     <div class="stale-box">
     NOTE: this table comes from the separate <code>backtest_runner.py</code> / vectorbt pipeline
-    (Upgrade H), not the RL/LSTM retraining reports below. It has not been re-verified this session —
-    treat it as a distinct, older result set.
+    (Upgrade H) — a one-off historical simulation, distinct from the live P&L above and from the
+    RL/LSTM retraining reports below. It has not been re-verified this session — treat it as an
+    older, separate result set. (Its Sharpe formula uses the same √(252×24) annualization as the
+    RL training bug fixed earlier — applied here to a full hourly equity curve, which is the
+    statistically correct usage, but worth a quick sanity check if time allows.)
     </div>""", unsafe_allow_html=True)
 
     bt_raw = [
