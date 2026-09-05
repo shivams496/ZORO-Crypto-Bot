@@ -168,7 +168,7 @@ def evaluate_on_coin(model, df: pd.DataFrame, n_episodes: int = 5) -> dict:
         return {"win_rate": 0.0, "avg_return": 0.0, "sharpe": 0.0, "trades": 0}
 
     r = np.array(all_returns)
-    sharpe = (r.mean() / (r.std() + 1e-8)) * np.sqrt(252 * 24)
+    sharpe = r.mean() / (r.std() + 1e-8)
     return {
         "win_rate":   win_count / trade_count,
         "avg_return": float(r.mean()),
