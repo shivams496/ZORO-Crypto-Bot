@@ -35,7 +35,6 @@ st.set_page_config(
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
-
 :root {
     --red:    #dc143c;
     --red2:   #8b0000;
@@ -48,13 +47,11 @@ st.markdown("""
     --muted:  #444;
     --dim:    #2a2a2a;
 }
-
 html, body, [class*="css"] {
     background-color: var(--bg) !important;
     color: #ccc !important;
     font-family: 'Rajdhani', sans-serif !important;
 }
-
 /* Scanline overlay */
 body::before {
     content: '';
@@ -62,7 +59,6 @@ body::before {
     background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
     pointer-events: none; z-index: 9999;
 }
-
 /* ── HEADER ── */
 .zoro-header {
     background: linear-gradient(90deg, #120000 0%, #0a0a0a 40%, #080808 100%);
@@ -117,7 +113,6 @@ body::before {
     font-size: 0.65rem; color: var(--muted);
     letter-spacing: 1px;
 }
-
 /* ── METRIC CARDS ── */
 .mc {
     background: var(--bg3); border: 1px solid var(--border);
@@ -146,7 +141,6 @@ body::before {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem;
 }
-
 /* ── COIN CARD ── */
 .coin-card {
     background: var(--bg3); border: 1px solid var(--border);
@@ -159,7 +153,6 @@ body::before {
 .coin-pct.g { color: var(--green); font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; }
 .coin-pct.r { color: var(--red);   font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; }
 .coin-rsi { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--dim); margin-top: 4px; }
-
 /* ── SIGNAL BADGES ── */
 .sig-long  { background:#001a0d; color:var(--green); border:1px solid #00ff8855;
              padding:2px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:2px; }
@@ -167,7 +160,6 @@ body::before {
              padding:2px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:2px; }
 .sig-flat  { background:var(--bg3); color:var(--muted); border:1px solid var(--dim);
              padding:2px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:2px; }
-
 /* ── SECTION TITLE ── */
 .st2 {
     font-family: 'Share Tech Mono', monospace;
@@ -178,7 +170,6 @@ body::before {
     display: flex; align-items: center; gap: 8px;
 }
 .st2::before { content: '//'; color: var(--red); }
-
 /* ── TABS ── */
 .stTabs [data-baseweb="tab-list"] {
     background: var(--bg2) !important;
@@ -195,25 +186,21 @@ body::before {
     color: var(--red) !important;
     border-bottom: 2px solid var(--red) !important;
 }
-
 /* ── PROGRESS BAR (confidence) ── */
 .conf-bar-wrap { background: var(--bg2); border-radius: 2px; height: 6px; margin-top: 4px; }
 .conf-bar { height: 6px; border-radius: 2px; background: linear-gradient(90deg, var(--red2), var(--red)); }
 .conf-bar.high { background: linear-gradient(90deg, #004d25, var(--green)); }
-
 /* ── SHAP BAR ── */
 .shap-row { display:flex; align-items:center; gap:8px; margin:6px 0; }
 .shap-label { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:#888; width:130px; flex-shrink:0; }
 .shap-bar-pos { height:16px; background:linear-gradient(90deg,var(--red2),var(--red)); border-radius:2px; }
 .shap-bar-neg { height:16px; background:linear-gradient(90deg,#004d25,var(--green)); border-radius:2px; }
 .shap-pct { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--muted); width:40px; text-align:right; }
-
 /* ── TABLE ── */
 .stDataFrame { background: var(--bg3) !important; }
 thead tr th { background: #150000 !important; color: var(--red) !important; font-family:'Share Tech Mono',monospace !important; font-size:0.72rem !important; }
 tbody tr td { font-family:'Share Tech Mono',monospace !important; font-size:0.75rem !important; }
 tbody tr:nth-child(even) td { background: var(--bg2) !important; }
-
 /* ── INFO BOX ── */
 .info-box {
     background: #0a0f0a; border: 1px solid #1a2d1a;
@@ -229,7 +216,25 @@ tbody tr:nth-child(even) td { background: var(--bg2) !important; }
     font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: #555;
     line-height: 1.6;
 }
-
+.stale-box {
+    background: #150a00; border: 1px solid #3d2200;
+    border-left: 3px solid #ff9500;
+    padding: 0.6rem 1rem; border-radius: 3px; margin: 0.5rem 0;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #ff9500;
+    line-height: 1.5;
+}
+.live-pill {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#0a1a0d; border:1px solid #1a3d1a; color:var(--green);
+    padding:3px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace;
+    font-size:0.68rem; letter-spacing:2px;
+}
+.stale-pill {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#1a1000; border:1px solid #3d2200; color:#ff9500;
+    padding:3px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace;
+    font-size:0.68rem; letter-spacing:2px;
+}
 /* ── TRADE ROW ── */
 .trade-row {
     background: var(--bg3); border: 1px solid var(--border);
@@ -237,7 +242,6 @@ tbody tr:nth-child(even) td { background: var(--bg2) !important; }
     padding: 0.6rem 1rem; margin: 0.3rem 0; border-radius: 2px;
     font-family: 'Share Tech Mono', monospace;
 }
-
 /* ── MISC ── */
 #MainMenu, footer, header { visibility: hidden; }
 .block-container { padding-top: 0 !important; max-width: 100% !important; }
@@ -246,6 +250,49 @@ tbody tr:nth-child(even) td { background: var(--bg2) !important; }
 div[data-testid="stMetric"] { display: none; }
 </style>
 """, unsafe_allow_html=True)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# REAL TRAINING RESULTS — sourced directly from retrain_report.txt / rl_train_report.txt
+# Do not hand-edit these numbers; regenerate this block if the reports change.
+# ══════════════════════════════════════════════════════════════════════════════
+LSTM_RESULTS = {
+    "train_acc": 50.0, "val_acc": 49.8, "test_acc": 53.3,
+    "walk_forward": [55.3, 54.9, 49.7],   # Window 1, 2, 3
+    "features": ["Close","RSI","MACD","BB_Width","ATR","SMA_20","Volume_Ratio"],
+    "seq_len": 60, "horizon_h": 4,
+}
+
+RL_RESULTS = {
+    "steps": 300_000,
+    "coins": ["ETH-USD","BTC-USD","SOL-USD","BNB-USD","ADA-USD"],
+    # Final model, single evaluation window — NOT live, NOT walk-forward
+    "final_eval": {
+        "ETH-USD": {"win": 88.1, "sharpe": 1.211, "trades": 67},
+        "BTC-USD": {"win": 88.1, "sharpe": 1.105, "trades": 42},
+        "SOL-USD": {"win": 84.4, "sharpe": 0.979, "trades": 45},
+        "BNB-USD": {"win": 97.6, "sharpe": 2.465, "trades": 84},
+        "ADA-USD": {"win": 68.2, "sharpe": 0.277, "trades": 66},
+    },
+    # Walk-forward Sharpe spread per coin — this is what actually tests consistency
+    "walk_forward": {
+        "ETH-USD": {"sharpes": [0.45, 0.00, 0.04], "spread": 0.45, "flag": "OK"},
+        "BTC-USD": {"sharpes": [1.90, 0.00, -0.29], "spread": 2.20, "flag": "CHECK"},
+        "SOL-USD": {"sharpes": [-0.11, 0.00, -0.14], "spread": 0.14, "flag": "OK"},
+        "BNB-USD": {"sharpes": [-0.34, 0.00, -0.23], "spread": 0.34, "flag": "OK"},
+        "ADA-USD": {"sharpes": [0.76, 0.00, 0.47], "spread": 0.76, "flag": "CHECK"},
+    },
+    "overall_consistent": False,  # verbatim from report: "Overall: consistent=NO"
+}
+
+def _rl_avg(field):
+    vals = [v[field] for v in RL_RESULTS["final_eval"].values()]
+    return sum(vals) / len(vals)
+
+RL_WIN_AVG = _rl_avg("win")
+RL_SHARPE_AVG = _rl_avg("sharpe")
+RL_SHARPE_MIN = min(v["sharpe"] for v in RL_RESULTS["final_eval"].values())
+RL_SHARPE_MAX = max(v["sharpe"] for v in RL_RESULTS["final_eval"].values())
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -336,16 +383,21 @@ def api_signals():
 
 @st.cache_data(ttl=30)
 def api_trades(limit=50):
+    """Returns (trades, is_live). is_live=False means we fell back to the
+    local JSON snapshot instead of the running trader.py API."""
     try:
         r = _req.get(f"{API_BASE}/trades", params={"limit": limit}, timeout=3)
-        if r.ok: return r.json()
-    except Exception: pass
-    # fallback: read local JSON
+        if r.ok:
+            return r.json(), True
+    except Exception:
+        pass
+    # fallback: read local JSON snapshot (STALE — not live)
     try:
         with open("zoro_trade_log.json") as f:
-            return json.load(f)
-    except Exception: pass
-    return []
+            return json.load(f), False
+    except Exception:
+        pass
+    return [], False
 
 @st.cache_data(ttl=30)
 def api_explain(symbol="BNB-USD"):
@@ -454,14 +506,14 @@ t1,t2,t3,t4,t5,t6 = st.tabs([
 # ══════════════════════════════════════════════════════════════════════════════
 with t1:
     # Top stats
-    st.markdown('<div class="st2">SYSTEM METRICS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="st2">SYSTEM METRICS &nbsp; (training-time evaluation — not live)</div>', unsafe_allow_html=True)
     c1,c2,c3,c4,c5,c6 = st.columns(6)
     cards = [
-        (c1,"RL WIN RATE","64.8%","g","200k PPO steps"),
-        (c2,"RL ALPHA vs B&H","+18.2%","g","bear market year"),
-        (c3,"LSTM ACCURACY","54%","y","walk-forward validated"),
+        (c1,"RL WIN RATE (AVG)",f"{RL_WIN_AVG:.1f}%","y","final eval · 5 coins · NOT live"),
+        (c2,"RL SHARPE (AVG)",f"{RL_SHARPE_AVG:.2f}","y",f"range {RL_SHARPE_MIN:.2f}–{RL_SHARPE_MAX:.2f}"),
+        (c3,"LSTM ACCURACY",f"{LSTM_RESULTS['test_acc']:.1f}%","y","walk-fwd 49.7–55.3%"),
         (c4,"SIGNAL THRESHOLD","70/100","","7-gate engine"),
-        (c5,"BNB BACKTEST","+16.9%","g","only profitable coin"),
+        (c5,"WALK-FWD CONSISTENCY","NO","r","BTC & ADA flagged · see RL tab"),
         (c6,"ACTIVE COINS","5","","ETH BTC SOL BNB ADA"),
     ]
     for col,(label,val,cls,sub) in zip([c1,c2,c3,c4,c5,c6], [(x[1],x[2],x[3],x[4]) for x in cards]):
@@ -472,6 +524,14 @@ with t1:
                 <div class="mc-value {cls}">{val}</div>
                 <div class="mc-sub">{sub}</div>
             </div>""", unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="warn-box">
+    ⚠️ The metrics above come from <code>rl_train_report.txt</code> / <code>retrain_report.txt</code>
+    (training-time backtests on historical data). They are <strong>not live trading results</strong>
+    and RL walk-forward consistency is flagged <strong>NO</strong> for BTC and ADA — see the RL AGENT tab
+    for the full per-coin breakdown before citing these numbers.
+    </div>""", unsafe_allow_html=True)
 
     # Live coin prices
     st.markdown('<div class="st2">LIVE COIN STATUS</div>', unsafe_allow_html=True)
@@ -514,9 +574,9 @@ with t1:
         st.code("""
 ┌── DATA LAYER ──────────┬── AI LAYER ─────────────┬── EXECUTION LAYER ────────────┐
 │  yfinance (1H OHLC)    │  LSTM 3-layer (60h seq)  │  7-Gate Signal Engine          │
-│  Binance WebSocket     │  PPO RL Agent (200k)     │  RSI 25/75 thresholds          │
+│  Binance WebSocket     │  PPO RL Agent (300k)     │  RSI 25/75 thresholds          │
 │  FinBERT RSS news      │  SHAP Explainability     │  ATR stop-loss 1.5×            │
-│  PostgreSQL store      │  54% directional acc.    │  Trailing stop 2.0×            │
+│  PostgreSQL store      │  53.3% directional acc.  │  Trailing stop 2.0×            │
 └────────────────────────┴─────────────────────────┴───────────────────────────────┘
           ↓                           ↓                             ↓
   ┌──────────────────────────────────────────────────────────────────────────┐
@@ -530,7 +590,7 @@ with t1:
         <span style="color:#00ff88">✔</span> <span style="color:#555">A</span> LSTM neural network<br>
         <span style="color:#00ff88">✔</span> <span style="color:#555">B</span> Backtesting (vectorbt)<br>
         <span style="color:#00ff88">✔</span> <span style="color:#555">C</span> Paper trading testnet<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">D</span> RL PPO agent 200k<br>
+        <span style="color:#00ff88">✔</span> <span style="color:#555">D</span> RL PPO agent 300k<br>
         <span style="color:#00ff88">✔</span> <span style="color:#555">E</span> KATANA dashboard<br>
         <span style="color:#00ff88">✔</span> <span style="color:#555">F</span> Short + ATR + trail<br>
         <span style="color:#00ff88">✔</span> <span style="color:#555">G</span> Telegram + 5 coins<br>
@@ -596,6 +656,13 @@ with t2:
         ["7","RL PPO Agent","Reinforcement signal","±10 pts"],
     ], columns=["#","Gate","Signal","Weight"])
     st.dataframe(gate_df, use_container_width=True, hide_index=True)
+
+    st.markdown("""
+    <div class="stale-box">
+    NOTE: this tab's signal engine currently runs a local rule-based <code>signal()</code>
+    function with a placeholder LSTM probability, rather than calling the real
+    <code>/signal</code> endpoint in <code>api.py</code>. Pending: rewire once api.py routes are confirmed.
+    </div>""", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -679,7 +746,13 @@ with t3:
 # TAB 4 — BACKTEST
 # ══════════════════════════════════════════════════════════════════════════════
 with t4:
-    st.markdown('<div class="st2">UPGRADE H — BACKTEST ALL 5 COINS (1 YEAR)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="st2">UPGRADE H — BACKTEST ALL 5 COINS (1 YEAR, VECTORBT PIPELINE)</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="stale-box">
+    NOTE: this table comes from the separate <code>backtest_runner.py</code> / vectorbt pipeline
+    (Upgrade H), not the RL/LSTM retraining reports below. It has not been re-verified this session —
+    treat it as a distinct, older result set.
+    </div>""", unsafe_allow_html=True)
 
     bt_raw = [
         ("ETH","ETH-USD",-15.3, 65,58.5,-45.3,-0.31,"⚠"),
@@ -718,49 +791,47 @@ with t4:
     st.markdown("""
     <div class="info-box">
     📌 Long-only weakness fixed in Upgrade F with short selling support.<br>
-    📌 RL Agent beats all strategies with +18.2% alpha vs Buy-and-Hold.<br>
-    📌 Why 54% and not 90%? — A consistent directional edge with risk management is profitable.
-    Walk-forward validation confirms no overfitting.
+    📌 Why 53.3% LSTM accuracy and not 90%? — A consistent directional edge with risk management
+    can be profitable; 90%+ on real market data would itself be a red flag for overfitting or leakage.
     </div>""", unsafe_allow_html=True)
 
-    # Walk-forward
-    st.markdown('<div class="st2">WALK-FORWARD VALIDATION (3 WINDOWS)</div>', unsafe_allow_html=True)
-    wf = pd.DataFrame([
-        {"Window":"W1 — Q1","Train":"Jan–Mar","Test":"Apr","LSTM Acc":"53.2%","RL Win Rate":"62.1%","Overfit":"None"},
-        {"Window":"W2 — Q2","Train":"Apr–Jun","Test":"Jul","LSTM Acc":"54.1%","RL Win Rate":"64.8%","Overfit":"None"},
-        {"Window":"W3 — Q3","Train":"Jul–Sep","Test":"Oct","LSTM Acc":"55.4%","RL Win Rate":"67.3%","Overfit":"None"},
-    ])
-    st.dataframe(wf, width='stretch', hide_index=True)
+    # Walk-forward — REAL data from the two report files
+    st.markdown('<div class="st2">WALK-FORWARD VALIDATION (REAL — FROM RETRAIN REPORTS)</div>', unsafe_allow_html=True)
 
-    # Strategy comparison
-    st.markdown('<div class="st2">STRATEGY COMPARISON — ETH (REPRESENTATIVE)</div>', unsafe_allow_html=True)
-    strategies = ["Buy & Hold","RSI Only","MACD Only","LSTM Only","RL PPO Agent"]
-    s_returns  = [-12.3, -8.1, -9.4, -5.4, 5.9]
-    s_colors   = ["#333","#444","#444","#555","#dc143c"]
-    fig_s = go.Figure(go.Bar(x=strategies, y=s_returns, marker_color=s_colors,
-                              text=[f"{v:+.1f}%" for v in s_returns],
-                              textposition="outside",
-                              textfont=dict(family="Share Tech Mono",color="#888",size=11)))
-    fig_s.add_hline(y=0,line_color="#333",line_width=1)
-    l_s = plotly_base(260)
-    l_s["yaxis"]["zeroline"] = True; l_s["yaxis"]["zerolinecolor"]="#333"
-    fig_s.update_layout(**l_s)
-    st.plotly_chart(fig_s, width='stretch')
+    col_wf1, col_wf2 = st.columns(2)
+    with col_wf1:
+        st.markdown('<div style="font-family:Share Tech Mono,monospace;font-size:0.68rem;color:#555;letter-spacing:2px;margin-bottom:0.4rem">LSTM — 3 WINDOWS</div>', unsafe_allow_html=True)
+        lstm_wf_df = pd.DataFrame([
+            {"Window": f"Window {i+1}", "Accuracy": f"{v:.1f}%"}
+            for i, v in enumerate(LSTM_RESULTS["walk_forward"])
+        ])
+        st.dataframe(lstm_wf_df, width='stretch', hide_index=True)
+        spread_lstm = max(LSTM_RESULTS["walk_forward"]) - min(LSTM_RESULTS["walk_forward"])
+        st.markdown(f'<div style="font-family:Share Tech Mono,monospace;font-size:0.68rem;color:#888">Spread: {spread_lstm:.1f} pts — reasonably consistent</div>', unsafe_allow_html=True)
+
+    with col_wf2:
+        st.markdown('<div style="font-family:Share Tech Mono,monospace;font-size:0.68rem;color:#555;letter-spacing:2px;margin-bottom:0.4rem">RL — PER-COIN SHARPE CONSISTENCY</div>', unsafe_allow_html=True)
+        rl_wf_df = pd.DataFrame([
+            {"Coin": c.replace("-USD",""), "Spread": f"{v['spread']:.2f}", "Flag": v["flag"]}
+            for c, v in RL_RESULTS["walk_forward"].items()
+        ])
+        st.dataframe(rl_wf_df, width='stretch', hide_index=True)
+        st.markdown('<div style="font-family:Share Tech Mono,monospace;font-size:0.68rem;color:#dc143c">Overall: consistent = NO (BTC, ADA flagged CHECK)</div>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TAB 5 — RL AGENT
 # ══════════════════════════════════════════════════════════════════════════════
 with t5:
-    st.markdown('<div class="st2">PPO REINFORCEMENT LEARNING AGENT</div>', unsafe_allow_html=True)
+    st.markdown('<div class="st2">PPO REINFORCEMENT LEARNING AGENT &nbsp; (training-time evaluation, not live)</div>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns([1,1])
     with col_left:
         for label,val,cls,sub in [
             ("ALGORITHM","PPO (Proximal Policy Optimization)","","Stable-Baselines3"),
-            ("TRAINING STEPS","200,000","g","4 checkpoints saved"),
-            ("WIN RATE","64.8%","g","vs 52.1% at 50k steps"),
-            ("ALPHA vs BUY & HOLD","+18.2%","g","bear market year"),
+            ("TRAINING STEPS",f"{RL_RESULTS['steps']:,}","g","single training run"),
+            ("WIN RATE (AVG, FINAL EVAL)",f"{RL_WIN_AVG:.1f}%","y","range 68.2%–97.6% by coin"),
+            ("SHARPE (AVG, FINAL EVAL)",f"{RL_SHARPE_AVG:.2f}","y",f"range {RL_SHARPE_MIN:.2f}–{RL_SHARPE_MAX:.2f}"),
             ("ACTION SPACE","BUY · SELL · HOLD","","discrete 3"),
         ]:
             st.markdown(f"""
@@ -769,6 +840,13 @@ with t5:
                 <div class="mc-value {cls}" style="font-size:{'1rem' if len(val)>10 else '1.4rem'}">{val}</div>
                 <div class="mc-sub">{sub}</div>
             </div>""", unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="stale-box">
+        ⚠️ Win rates of 68–98% are unusually high for a real trading strategy and are
+        flagged here rather than presented as an unqualified success — see the
+        walk-forward consistency panel below before citing this number anywhere formal.
+        </div>""", unsafe_allow_html=True)
 
     with col_right:
         st.markdown('<div class="st2">STATE SPACE (10 FEATURES)</div>', unsafe_allow_html=True)
@@ -787,46 +865,45 @@ with t5:
         st.dataframe(obs_df, width='stretch', hide_index=True)
 
         st.markdown('<div class="st2">REWARD FUNCTION</div>', unsafe_allow_html=True)
-        st.code("""reward = log_return
-        - 0.1 × drawdown_penalty
-        - 0.001 × trade_frequency_penalty
-        + 0.05 × win_streak_bonus""", language="python")
+        st.code("reward = sharpe_ratio   # per report: 'Reward: Sharpe ratio'", language="python")
 
-    # Training curve
-    st.markdown('<div class="st2">TRAINING PROGRESS</div>', unsafe_allow_html=True)
-    steps = [50000, 100000, 150000, 200000]
-    win_r = [52.1, 57.8, 61.2, 64.8]
-    reward_avg = [-0.12, 0.08, 0.21, 0.34]
-
-    fig_train = make_subplots(rows=1, cols=2, subplot_titles=["Win Rate %","Avg Reward"])
-    fig_train.add_trace(go.Scatter(x=steps, y=win_r, mode="lines+markers",
-                                   line=dict(color="#dc143c", width=2),
-                                   marker=dict(color="#dc143c", size=8)), row=1, col=1)
-    fig_train.add_trace(go.Bar(x=steps, y=reward_avg,
-                                marker_color=["#333","#555","#888","#dc143c"]), row=1, col=2)
-    l_tr = plotly_base(260)
-    l_tr.update({"annotations":[
-        dict(text="Win Rate %", x=0.2, y=1.05, xref="paper", yref="paper", showarrow=False,
-             font=dict(family="Share Tech Mono", color="#444", size=10)),
-        dict(text="Avg Reward", x=0.8, y=1.05, xref="paper", yref="paper", showarrow=False,
-             font=dict(family="Share Tech Mono", color="#444", size=10)),
-    ]})
-    fig_train.update_layout(**l_tr)
-    for r in [1]:
-        for c in [1,2]:
-            fig_train.update_xaxes(gridcolor="#111", row=r, col=c)
-            fig_train.update_yaxes(gridcolor="#111", row=r, col=c)
-    st.plotly_chart(fig_train, width='stretch')
-
-    # Checkpoint table
-    st.markdown('<div class="st2">CHECKPOINTS</div>', unsafe_allow_html=True)
-    ck_df = pd.DataFrame([
-        {"Steps":"50k","Win Rate":"52.1%","Avg Reward":"-0.12","Sharpe":"-0.31","Status":"Saved"},
-        {"Steps":"100k","Win Rate":"57.8%","Avg Reward":"+0.08","Sharpe":"+0.14","Status":"Saved"},
-        {"Steps":"150k","Win Rate":"61.2%","Avg Reward":"+0.21","Sharpe":"+0.28","Status":"Saved"},
-        {"Steps":"200k","Win Rate":"64.8%","Avg Reward":"+0.34","Sharpe":"+0.41","Status":"✅ FINAL"},
+    # Final evaluation — real per-coin table
+    st.markdown('<div class="st2">FINAL MODEL — PER-COIN EVALUATION (REAL, SINGLE WINDOW)</div>', unsafe_allow_html=True)
+    final_df = pd.DataFrame([
+        {"Coin": c.replace("-USD",""), "Win Rate": f"{v['win']:.1f}%",
+         "Sharpe": f"{v['sharpe']:.3f}", "Trades": v["trades"]}
+        for c, v in RL_RESULTS["final_eval"].items()
     ])
-    st.dataframe(ck_df, width='stretch', hide_index=True)
+    st.dataframe(final_df, width='stretch', hide_index=True)
+
+    fig_final = go.Figure(go.Bar(
+        x=[c.replace("-USD","") for c in RL_RESULTS["final_eval"]],
+        y=[v["win"] for v in RL_RESULTS["final_eval"].values()],
+        marker_color="#dc143c",
+        text=[f"{v['win']:.1f}%" for v in RL_RESULTS["final_eval"].values()],
+        textposition="outside",
+        textfont=dict(family="Share Tech Mono", color="#888", size=11),
+    ))
+    l_final = plotly_base(240)
+    fig_final.update_layout(**l_final)
+    st.plotly_chart(fig_final, width='stretch')
+
+    # Walk-forward consistency — the honest counterpart
+    st.markdown('<div class="st2">WALK-FORWARD CONSISTENCY — PER-COIN SHARPE ACROSS 3 WINDOWS</div>', unsafe_allow_html=True)
+    wf_detail_df = pd.DataFrame([
+        {"Coin": c.replace("-USD",""),
+         "Sharpe W1": v["sharpes"][0], "Sharpe W2": v["sharpes"][1], "Sharpe W3": v["sharpes"][2],
+         "Spread": f"{v['spread']:.2f}", "Flag": v["flag"]}
+        for c, v in RL_RESULTS["walk_forward"].items()
+    ])
+    st.dataframe(wf_detail_df, width='stretch', hide_index=True)
+    st.markdown(f"""
+    <div class="warn-box">
+    Overall: <strong style="color:#dc143c">consistent = NO</strong> — BTC-USD (spread 2.20) and
+    ADA-USD (spread 0.76) show sharpe swings across windows large enough to be flagged [CHECK].
+    ETH, SOL, and BNB are [OK]. This is stated directly rather than smoothed over, per project policy
+    on this dashboard.
+    </div>""", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -922,9 +999,15 @@ with t6:
             </div>""", unsafe_allow_html=True)
 
     with col_log:
-        st.markdown('<div class="st2">LIVE TRADE LOG — ALL COINS</div>', unsafe_allow_html=True)
+        st.markdown('<div class="st2">TRADE LOG — ALL COINS</div>', unsafe_allow_html=True)
 
-        trades = api_trades(limit=20)
+        trades, trades_live = api_trades(limit=20)
+
+        # ── Live vs stale indicator ─────────────────────────────────────────
+        if trades_live:
+            st.markdown('<span class="live-pill"><span class="live-dot" style="width:6px;height:6px"></span>LIVE — from running trader.py</span>', unsafe_allow_html=True)
+        else:
+            st.markdown('<span class="stale-pill">⏸ STALE SNAPSHOT — reading zoro_trade_log.json (trader.py API unreachable)</span>', unsafe_allow_html=True)
 
         # ── PnL Summary Stats ─────────────────────────────────────────────────
         if trades:
