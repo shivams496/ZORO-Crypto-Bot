@@ -1,5 +1,5 @@
 =================================================================
-ZORO RL Agent Retraining Report — Phase 2 Step 2
+ZORO RL Agent Retraining Report â€” Phase 2 Step 2
 Trained on: ETH-USD, BTC-USD, SOL-USD, BNB-USD, ADA-USD
 =================================================================
 Obs space  : 10 features (rsi, macd, bb, trend, vol, sentiment,
@@ -10,24 +10,24 @@ Steps      : 300,000
 
 Walk-Forward Validation (per coin)
 -----------------------------------------------------------------
-  ETH-USD   sharpes=['69.58', '-3.28', '363.98']  spread=367.26  [CHECK]
-  BTC-USD   sharpes=['79.40', '-41.72', '82.83']  spread=124.56  [CHECK]
-  SOL-USD   sharpes=['105.31', '-36.87', '0.00']  spread=142.18  [CHECK]
-  BNB-USD   sharpes=['40.35', '-51.75', '873.47']  spread=925.22  [CHECK]
-  ADA-USD   sharpes=['65.60', '-63.86', '62.86']  spread=129.47  [CHECK]
+  ETH-USD   sharpes=['0.45', '0.00', '0.04']  spread=0.45  [OK]
+  BTC-USD   sharpes=['1.90', '0.00', '-0.29']  spread=2.20  [CHECK]
+  SOL-USD   sharpes=['-0.11', '0.00', '-0.14']  spread=0.14  [OK]
+  BNB-USD   sharpes=['-0.34', '0.00', '-0.23']  spread=0.34  [OK]
+  ADA-USD   sharpes=['0.76', '0.00', '0.47']  spread=0.76  [CHECK]
 
   Overall: consistent=NO
 
-Final Model — Per Coin Evaluation
+Final Model â€” Per Coin Evaluation
 -----------------------------------------------------------------
-  ETH-USD   win=92.7%  sharpe=107.195  trades=55
-  BTC-USD   win=92.5%  sharpe=113.028  trades=67
-  SOL-USD   win=89.4%  sharpe=78.829  trades=66
-  BNB-USD   win=78.8%  sharpe=67.436  trades=85
-  ADA-USD   win=100.0%  sharpe=43.171  trades=9
+  ETH-USD   win=88.1%  sharpe=1.211  trades=67
+  BTC-USD   win=88.1%  sharpe=1.105  trades=42
+  SOL-USD   win=84.4%  sharpe=0.979  trades=45
+  BNB-USD   win=97.6%  sharpe=2.465  trades=84
+  ADA-USD   win=68.2%  sharpe=0.277  trades=66
 
 Output
 -----------------------------------------------------------------
-  zoro_ppo_agent.zip — already in zoro_v2/
+  zoro_ppo_agent.zip â€” already in zoro_v2/
   Run: python trader.py
 =================================================================
