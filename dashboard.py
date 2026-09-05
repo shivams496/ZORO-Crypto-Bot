@@ -1,6 +1,6 @@
 """
 dashboard.py — ZORO KATANA Terminal Dashboard v2
-Full production build — crimson/dark theme · 6 tabs · live data · SHAP
+Full production build — Zoro moss-green/dark theme · 6 tabs · live data · SHAP
 Run: streamlit run dashboard.py
 """
 
@@ -36,14 +36,16 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
 :root {
-    --red:    #dc143c;
-    --red2:   #8b0000;
-    --green:  #00ff88;
+    --red:    #C1554A;
+    --red2:   #5A2620;
+    --green:  #5FD98F;
+    --brand:  #4C8A63;
+    --brand2: #1F3D2C;
     --gold:   #ffd700;
-    --bg:     #080808;
-    --bg2:    #0d0d0d;
-    --bg3:    #111111;
-    --border: #1a1a1a;
+    --bg:     #080A08;
+    --bg2:    #0D120E;
+    --bg3:    #14201A;
+    --border: #1A241D;
     --muted:  #444;
     --dim:    #2a2a2a;
 }
@@ -61,8 +63,8 @@ body::before {
 }
 /* ── HEADER ── */
 .zoro-header {
-    background: linear-gradient(90deg, #120000 0%, #0a0a0a 40%, #080808 100%);
-    border-bottom: 1px solid var(--red2);
+    background: linear-gradient(90deg, #0A1712 0%, #0A0D0A 40%, #080A08 100%);
+    border-bottom: 1px solid var(--brand2);
     padding: 0.9rem 2rem;
     margin: -1rem -1rem 0 -1rem;
     display: flex; align-items: center; gap: 1.5rem;
@@ -71,14 +73,14 @@ body::before {
 .zoro-header::after {
     content: '';
     position: absolute; left: 0; bottom: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, var(--red) 0%, transparent 60%);
+    background: linear-gradient(90deg, var(--brand) 0%, transparent 60%);
 }
 .zoro-logo {
     font-family: 'Orbitron', monospace;
     font-size: 2.2rem; font-weight: 900;
-    color: var(--red);
+    color: var(--brand);
     letter-spacing: 6px;
-    text-shadow: 0 0 30px rgba(220,20,60,0.6), 0 0 60px rgba(220,20,60,0.2);
+    text-shadow: 0 0 30px rgba(76,138,99,0.6), 0 0 60px rgba(76,138,99,0.2);
     animation: flicker 6s infinite;
 }
 @keyframes flicker {
@@ -116,14 +118,14 @@ body::before {
 /* ── METRIC CARDS ── */
 .mc {
     background: var(--bg3); border: 1px solid var(--border);
-    border-top: 2px solid var(--red2); border-radius: 3px;
+    border-top: 2px solid var(--brand2); border-radius: 3px;
     padding: 0.9rem 1.1rem; margin: 0.3rem 0;
     position: relative; overflow: hidden;
 }
 .mc::after {
     content: ''; position: absolute; top: 0; right: 0;
     width: 30%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--red2));
+    background: linear-gradient(90deg, transparent, var(--brand2));
 }
 .mc-label {
     font-family: 'Share Tech Mono', monospace;
@@ -134,8 +136,8 @@ body::before {
     font-family: 'Orbitron', monospace;
     font-size: 1.5rem; font-weight: 700; color: #eee;
 }
-.mc-value.g { color: var(--green); text-shadow: 0 0 12px rgba(0,255,136,0.3); }
-.mc-value.r { color: var(--red);   text-shadow: 0 0 12px rgba(220,20,60,0.3); }
+.mc-value.g { color: var(--green); text-shadow: 0 0 12px rgba(95,217,143,0.3); }
+.mc-value.r { color: var(--red);   text-shadow: 0 0 12px rgba(193,85,74,0.3); }
 .mc-value.y { color: var(--gold);  text-shadow: 0 0 12px rgba(255,215,0,0.2); }
 .mc-sub {
     font-family: 'Share Tech Mono', monospace;
@@ -147,16 +149,16 @@ body::before {
     border-radius: 3px; padding: 0.8rem;
     transition: border-color 0.2s;
 }
-.coin-card:hover { border-color: var(--red2); }
+.coin-card:hover { border-color: var(--brand2); }
 .coin-name { font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; }
 .coin-price { font-family: 'Share Tech Mono', monospace; font-size: 1.3rem; color: #fff; margin: 0.3rem 0 0.1rem; }
 .coin-pct.g { color: var(--green); font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; }
 .coin-pct.r { color: var(--red);   font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; }
 .coin-rsi { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; color: var(--dim); margin-top: 4px; }
 /* ── SIGNAL BADGES ── */
-.sig-long  { background:#001a0d; color:var(--green); border:1px solid #00ff8855;
+.sig-long  { background:#001a0d; color:var(--green); border:1px solid #5FD98F55;
              padding:2px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:2px; }
-.sig-short { background:#1a0005; color:var(--red);   border:1px solid #dc143c55;
+.sig-short { background:#1a0005; color:var(--red);   border:1px solid #C1554A55;
              padding:2px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:2px; }
 .sig-flat  { background:var(--bg3); color:var(--muted); border:1px solid var(--dim);
              padding:2px 10px; border-radius:2px; font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:2px; }
@@ -164,12 +166,12 @@ body::before {
 .st2 {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.68rem; letter-spacing: 3px;
-    color: var(--red2); text-transform: uppercase;
+    color: var(--brand2); text-transform: uppercase;
     border-bottom: 1px solid var(--border);
     padding-bottom: 0.35rem; margin: 1.4rem 0 0.9rem 0;
     display: flex; align-items: center; gap: 8px;
 }
-.st2::before { content: '//'; color: var(--red); }
+.st2::before { content: '//'; color: var(--brand); }
 /* ── TABS ── */
 .stTabs [data-baseweb="tab-list"] {
     background: var(--bg2) !important;
@@ -183,22 +185,22 @@ body::before {
     border: none !important; padding: 0.7rem 1rem !important;
 }
 .stTabs [aria-selected="true"] {
-    color: var(--red) !important;
-    border-bottom: 2px solid var(--red) !important;
+    color: var(--brand) !important;
+    border-bottom: 2px solid var(--brand) !important;
 }
 /* ── PROGRESS BAR (confidence) ── */
 .conf-bar-wrap { background: var(--bg2); border-radius: 2px; height: 6px; margin-top: 4px; }
 .conf-bar { height: 6px; border-radius: 2px; background: linear-gradient(90deg, var(--red2), var(--red)); }
-.conf-bar.high { background: linear-gradient(90deg, #004d25, var(--green)); }
+.conf-bar.high { background: linear-gradient(90deg, #1F3D2C, var(--green)); }
 /* ── SHAP BAR ── */
 .shap-row { display:flex; align-items:center; gap:8px; margin:6px 0; }
 .shap-label { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:#888; width:130px; flex-shrink:0; }
 .shap-bar-pos { height:16px; background:linear-gradient(90deg,var(--red2),var(--red)); border-radius:2px; }
-.shap-bar-neg { height:16px; background:linear-gradient(90deg,#004d25,var(--green)); border-radius:2px; }
+.shap-bar-neg { height:16px; background:linear-gradient(90deg,#1F3D2C,var(--green)); border-radius:2px; }
 .shap-pct { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--muted); width:40px; text-align:right; }
 /* ── TABLE ── */
 .stDataFrame { background: var(--bg3) !important; }
-thead tr th { background: #150000 !important; color: var(--red) !important; font-family:'Share Tech Mono',monospace !important; font-size:0.72rem !important; }
+thead tr th { background: #0D1A12 !important; color: var(--brand) !important; font-family:'Share Tech Mono',monospace !important; font-size:0.72rem !important; }
 tbody tr td { font-family:'Share Tech Mono',monospace !important; font-size:0.75rem !important; }
 tbody tr:nth-child(even) td { background: var(--bg2) !important; }
 /* ── INFO BOX ── */
@@ -238,7 +240,7 @@ tbody tr:nth-child(even) td { background: var(--bg2) !important; }
 /* ── TRADE ROW ── */
 .trade-row {
     background: var(--bg3); border: 1px solid var(--border);
-    border-left: 3px solid var(--red2);
+    border-left: 3px solid var(--brand2);
     padding: 0.6rem 1rem; margin: 0.3rem 0; border-radius: 2px;
     font-family: 'Share Tech Mono', monospace;
 }
@@ -246,7 +248,7 @@ tbody tr:nth-child(even) td { background: var(--bg2) !important; }
 #MainMenu, footer, header { visibility: hidden; }
 .block-container { padding-top: 0 !important; max-width: 100% !important; }
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-thumb { background: var(--red2); }
+::-webkit-scrollbar-thumb { background: var(--brand2); }
 div[data-testid="stMetric"] { display: none; }
 </style>
 """, unsafe_allow_html=True)
@@ -366,8 +368,8 @@ def signal(symbol, df):
 
 COINS = {"ETH-USD":"ETH","BTC-USD":"BTC","SOL-USD":"SOL","BNB-USD":"BNB","ADA-USD":"ADA"}
 API_BASE = "http://localhost:8000"
-PLOT_BG  = "#080808"
-PLOT_BG2 = "#0d0d0d"
+PLOT_BG  = "#080A08"
+PLOT_BG2 = "#0D120E"
 PLOT_FONT = dict(family="Share Tech Mono", color="#444", size=10)
 
 # ── API helpers (live data from trader.py via FastAPI) ────────────────────
@@ -461,14 +463,14 @@ import time as _time
 with st.sidebar:
     st.markdown("""
     <div style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;
-                color:#8b0000;letter-spacing:2px;margin-bottom:0.5rem">
+                color:#4C8A63;letter-spacing:2px;margin-bottom:0.5rem">
     ⚔ ZORO CONTROLS
     </div>""", unsafe_allow_html=True)
     auto_refresh = st.toggle("Auto-refresh (60s)", value=True)
     if auto_refresh:
         st.markdown("""<div style="font-family:'Share Tech Mono',monospace;
                     font-size:0.68rem;color:#444">
-                    <span style="color:#00ff88">●</span> Refreshing every 60s
+                    <span style="color:#5FD98F">●</span> Refreshing every 60s
                     </div>""", unsafe_allow_html=True)
     st.markdown("---")
     st.markdown("""<div style="font-family:'Share Tech Mono',monospace;
@@ -491,9 +493,9 @@ for _sym, _ticker in COINS.items():
         _rsi = float(_df["RSI"].iloc[-1])
         _price = float(_df["Close"].iloc[-1])
         if _rsi > 75:
-            _alert_coins.append((_ticker, _rsi, _price, "SHORT", "#dc143c", "🔴"))
+            _alert_coins.append((_ticker, _rsi, _price, "SHORT", "#C1554A", "🔴"))
         elif _rsi < 25:
-            _alert_coins.append((_ticker, _rsi, _price, "LONG", "#00ff88", "🟢"))
+            _alert_coins.append((_ticker, _rsi, _price, "LONG", "#5FD98F", "🟢"))
 
 if _alert_coins:
     _parts = " &nbsp;·&nbsp; ".join(
@@ -501,7 +503,7 @@ if _alert_coins:
         for t, r, p, d, c, flag in _alert_coins
     )
     st.markdown(f"""
-    <div style="background:#150000;border:1px solid #8b0000;border-left:4px solid #dc143c;
+    <div style="background:#0D1A12;border:1px solid #5A2620;border-left:4px solid #C1554A;
                 padding:0.6rem 1rem;margin:0.5rem 0;border-radius:3px;
                 font-family:'Share Tech Mono',monospace;font-size:0.78rem;
                 animation:flicker 2s infinite">
@@ -565,9 +567,9 @@ with t1:
                 atr   = df["ATR"].iloc[-1]
                 cls   = "g" if pct>=0 else "r"
                 sign  = "+" if pct>=0 else ""
-                rsi_color = "#dc143c" if rsi>70 else "#00ff88" if rsi<30 else "#888"
+                rsi_color = "#C1554A" if rsi>70 else "#5FD98F" if rsi<30 else "#888"
                 bc = "#003d1f" if pct>=0 else "#3d0000"
-                bt = "#00ff88" if pct>=0 else "#dc143c"
+                bt = "#5FD98F" if pct>=0 else "#C1554A"
                 st.markdown(f"""
                 <div class="coin-card" style="border-top: 2px solid {bt}">
                     <div class="coin-name">{ticker}</div>
@@ -602,14 +604,14 @@ with t1:
         st.markdown("""
         <div class="st2">UPGRADE LOG</div>
         <div style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;line-height:2">
-        <span style="color:#00ff88">✔</span> <span style="color:#555">A</span> LSTM neural network<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">B</span> Backtesting (vectorbt)<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">C</span> Paper trading testnet<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">D</span> RL PPO agent 300k<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">E</span> KATANA dashboard<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">F</span> Short + ATR + trail<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">G</span> Telegram + 5 coins<br>
-        <span style="color:#00ff88">✔</span> <span style="color:#555">H</span> Backtest all 5 coins
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">A</span> LSTM neural network<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">B</span> Backtesting (vectorbt)<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">C</span> Paper trading testnet<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">D</span> RL PPO agent 300k<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">E</span> KATANA dashboard<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">F</span> Short + ATR + trail<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">G</span> Telegram + 5 coins<br>
+        <span style="color:#5FD98F">✔</span> <span style="color:#555">H</span> Backtest all 5 coins
         </div>""", unsafe_allow_html=True)
 
 
@@ -641,7 +643,7 @@ with t2:
         badge = f'<span class="sig-{"long" if direction=="LONG" else "short" if direction=="SHORT" else "flat"}">{direction}</span>'
         conf_class = "high" if actionable else ""
         fire = " 🔥" if actionable else ""
-        conf_color = "#00ff88" if actionable else "#ffd700" if conf>=50 else "#333"
+        conf_color = "#5FD98F" if actionable else "#ffd700" if conf>=50 else "#333"
 
         with st.container():
             col_t, col_p, col_d, col_c, col_g = st.columns([0.8, 1.2, 1, 1.5, 5])
@@ -686,7 +688,7 @@ with t2:
             conf_f = full_sig.get("confidence", 0)
             price_f = float(full_sig.get("price", 0))
             gates_f = full_sig.get("gates", [])
-            dir_color_f = "#00ff88" if direction_f == "LONG" else "#dc143c" if direction_f == "SHORT" else "#888"
+            dir_color_f = "#5FD98F" if direction_f == "LONG" else "#C1554A" if direction_f == "SHORT" else "#888"
             st.markdown(f"""
             <div class="mc" style="border-top-color:{dir_color_f}">
                 <div class="mc-label">{COINS[full_scan_coin]} — FULL ENGINE RESULT</div>
@@ -761,22 +763,22 @@ with t3:
 
         fig.add_trace(go.Candlestick(
             x=df.index, open=df["Open"], high=df["High"], low=df["Low"], close=df["Close"],
-            increasing_line_color="#00ff88", decreasing_line_color="#dc143c",
+            increasing_line_color="#5FD98F", decreasing_line_color="#C1554A",
             increasing_fillcolor="#003d1f", decreasing_fillcolor="#3d0000",
             name="Price"), row=1, col=1)
         fig.add_trace(go.Scatter(x=df.index, y=df["SMA20"], line=dict(color="#ffd700",width=1), name="SMA20"), row=1, col=1)
         fig.add_trace(go.Scatter(x=df.index, y=df["SMA50"], line=dict(color="#555",width=1,dash="dot"), name="SMA50"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=df["BB_Up"], line=dict(color="rgba(220,20,60,0.13)",width=1), name="BB Upper",
+        fig.add_trace(go.Scatter(x=df.index, y=df["BB_Up"], line=dict(color="rgba(76,138,99,0.13)",width=1), name="BB Upper",
                                  fill=None), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=df["BB_Lo"], line=dict(color="rgba(220,20,60,0.13)",width=1), name="BB Lower",
-                                 fill='tonexty', fillcolor='rgba(220,20,60,0.04)'), row=1, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df["BB_Lo"], line=dict(color="rgba(76,138,99,0.13)",width=1), name="BB Lower",
+                                 fill='tonexty', fillcolor='rgba(76,138,99,0.04)'), row=1, col=1)
 
-        fig.add_trace(go.Scatter(x=df.index, y=df["RSI"], line=dict(color="#dc143c",width=1.5), name="RSI"), row=2, col=1)
-        fig.add_hline(y=75, line_color="#dc143c", line_dash="dot", opacity=0.3, row=2, col=1)
-        fig.add_hline(y=25, line_color="#00ff88", line_dash="dot", opacity=0.3, row=2, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=df["RSI"], line=dict(color="#C1554A",width=1.5), name="RSI"), row=2, col=1)
+        fig.add_hline(y=75, line_color="#C1554A", line_dash="dot", opacity=0.3, row=2, col=1)
+        fig.add_hline(y=25, line_color="#5FD98F", line_dash="dot", opacity=0.3, row=2, col=1)
         fig.add_hline(y=50, line_color="#333",    line_dash="dot", opacity=0.3, row=2, col=1)
 
-        colors_m = ["#00ff88" if v>=0 else "#dc143c" for v in df["MACD_Hist"]]
+        colors_m = ["#5FD98F" if v>=0 else "#C1554A" for v in df["MACD_Hist"]]
         fig.add_trace(go.Bar(x=df.index, y=df["MACD_Hist"], marker_color=colors_m, name="MACD"), row=3, col=1)
         fig.add_trace(go.Scatter(x=df.index, y=df["MACD"], line=dict(color="#ffd700",width=1), name="MACD"), row=3, col=1)
 
@@ -836,7 +838,7 @@ with t4:
     # Return chart
     coins_bt = [r[0] for r in bt_raw]
     returns_bt = [r[2] for r in bt_raw]
-    colors_bt = ["#00ff88" if v>=0 else "#dc143c" for v in returns_bt]
+    colors_bt = ["#5FD98F" if v>=0 else "#C1554A" for v in returns_bt]
 
     fig_bt = go.Figure()
     fig_bt.add_trace(go.Bar(x=coins_bt, y=returns_bt, marker_color=colors_bt,
@@ -887,7 +889,7 @@ with t4:
             for c, v in RL_RESULTS["walk_forward"].items()
         ])
         st.dataframe(rl_wf_df, width='stretch', hide_index=True)
-        st.markdown('<div style="font-family:Share Tech Mono,monospace;font-size:0.68rem;color:#dc143c">Overall: consistent = NO (BTC, ADA flagged CHECK)</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-family:Share Tech Mono,monospace;font-size:0.68rem;color:#C1554A">Overall: consistent = NO (BTC, ADA flagged CHECK)</div>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -950,7 +952,7 @@ with t5:
     fig_final = go.Figure(go.Bar(
         x=[c.replace("-USD","") for c in RL_RESULTS["final_eval"]],
         y=[v["win"] for v in RL_RESULTS["final_eval"].values()],
-        marker_color="#dc143c",
+        marker_color="#C1554A",
         text=[f"{v['win']:.1f}%" for v in RL_RESULTS["final_eval"].values()],
         textposition="outside",
         textfont=dict(family="Share Tech Mono", color="#888", size=11),
@@ -970,7 +972,7 @@ with t5:
     st.dataframe(wf_detail_df, width='stretch', hide_index=True)
     st.markdown(f"""
     <div class="warn-box">
-    Overall: <strong style="color:#dc143c">consistent = NO</strong> — BTC-USD (spread 2.20) and
+    Overall: <strong style="color:#C1554A">consistent = NO</strong> — BTC-USD (spread 2.20) and
     ADA-USD (spread 0.76) show sharpe swings across windows large enough to be flagged [CHECK].
     ETH, SOL, and BNB are [OK]. This is stated directly rather than smoothed over, per project policy
     on this dashboard.
@@ -988,7 +990,7 @@ with t6:
         coins_open = ", ".join(bot_status.get("coins_tracked", [])) or "none"
         st.markdown(f"""
         <div class="info-box" style="margin-bottom:0.8rem">
-            ⚔️ <strong style="color:#00ff88">TRADER ONLINE</strong> &nbsp;·&nbsp;
+            ⚔️ <strong style="color:#5FD98F">TRADER ONLINE</strong> &nbsp;·&nbsp;
             Open positions: <strong style="color:#ffd700">{open_pos}</strong> &nbsp;·&nbsp;
             Coins: <strong style="color:#ffd700">{coins_open}</strong>
         </div>""", unsafe_allow_html=True)
@@ -1022,7 +1024,7 @@ with t6:
             sentiment_s  = float(shap_data.get("sentiment", 0))
             lstm_s       = float(shap_data.get("lstm_prob", 0.5))
 
-            dir_color = "#00ff88" if direction_s == "LONG" else "#dc143c"
+            dir_color = "#5FD98F" if direction_s == "LONG" else "#C1554A"
             st.markdown(f"""
             <div class="mc" style="border-top-color:{dir_color}">
                 <div class="mc-label">{shap_coin} — LIVE SIGNAL</div>
@@ -1120,7 +1122,7 @@ with t6:
                 ts     = str(tr.get("timestamp",""))[:19]
                 sl     = float(tr.get("stop_loss") or 0)
                 pnl    = tr.get("pnl")
-                border = "#00ff88" if action == "LONG" else "#dc143c"
+                border = "#5FD98F" if action == "LONG" else "#C1554A"
                 pnl_str = f"PnL: {float(pnl):+.2f}" if pnl is not None else "PnL: OPEN"
                 st.markdown(f"""
                 <div class="trade-row" style="border-left-color:{border}">
@@ -1135,10 +1137,10 @@ with t6:
                 </div>""", unsafe_allow_html=True)
         else:
             st.markdown("""
-            <div style="background:#0d0d0d;border:1px solid #1a1a1a;padding:2.5rem;text-align:center;border-radius:3px;margin-top:1rem">
+            <div style="background:#0D120E;border:1px solid #1A241D;padding:2.5rem;text-align:center;border-radius:3px;margin-top:1rem">
                 <div style="font-family:Share Tech Mono,monospace;color:#2a2a2a;font-size:0.85rem">
                     NO TRADES YET<br><br>
-                    <span style="font-size:0.7rem;color:#1a1a1a">
+                    <span style="font-size:0.7rem;color:#1A241D">
                         Run <code style="color:#333">python trader.py</code> to begin paper trading.<br>
                         Trades will appear here automatically.
                     </span>
