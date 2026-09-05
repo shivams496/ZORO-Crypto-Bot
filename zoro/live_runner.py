@@ -26,6 +26,9 @@ import pytz
 
 os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("TF_NUM_INTRAOP_THREADS", "1")
+os.environ.setdefault("TF_NUM_INTEROP_THREADS", "1")
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
 log = logging.getLogger("zoro.live_runner")
@@ -42,6 +45,7 @@ _last_alert_key: dict = {}   # symbol -> last (direction, actionable) we alerted
 
 def _run_api_server():
     """Serve the existing FastAPI app on :8000 inside this process."""
+    import asyncio
     import uvicorn
     import api as _api
 
@@ -52,7 +56,12 @@ def _run_api_server():
 
     config = uvicorn.Config(_api.app, host="0.0.0.0", port=8000, log_level="warning")
     server = uvicorn.Server(config)
-    server.run()
+    # IMPORTANT: server.run() tries to install OS signal handlers, which is
+    # only allowed on Python's main thread — doing that from a background
+    # thread here has been observed to crash the whole process (exit 139).
+    # server.serve() (async, no signal handlers) run via asyncio.run() avoids it.
+    server.install_signal_handlers = lambda *a, **k: None
+    asyncio.run(server.serve())
 
 
 def _run_scan_loop():
@@ -126,5 +135,6 @@ def start_live_system():
             return
         _STARTED = True
         threading.Thread(target=_run_api_server, daemon=True, name="zoro-api").start()
+        time.sleep(3)  # stagger: let uvicorn settle before the heavy TF/torch loads start
         threading.Thread(target=_run_scan_loop, daemon=True, name="zoro-scanner").start()
         log.info("[LIVE] ZORO background system started (API :8000 + scanner)")

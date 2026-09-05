@@ -350,7 +350,7 @@ def api_trades(limit=50):
 @st.cache_data(ttl=30)
 def api_explain(symbol="BNB-USD"):
     try:
-        r = _req.get(f"{API_BASE}/explain", params={"symbol": symbol}, timeout=8)
+        r = _req.get(f"{API_BASE}/explain", params={"symbol": symbol}, timeout=45)
         if r.ok: return r.json()
     except Exception: pass
     return None
@@ -412,6 +412,11 @@ with st.sidebar:
                 </div>""", unsafe_allow_html=True)
 
 # ── RSI Alert banner — shows whichever coin is in signal zone ─────────────────
+all_data = {}
+for _sym in COINS:
+    _df = indicators(fetch_data(_sym))
+    all_data[_sym] = _df
+
 _alert_coins = []
 for _sym, _ticker in COINS.items():
     _df = all_data.get(_sym)
@@ -1005,8 +1010,7 @@ with t6:
   "pnl":       null
 }""", language="json")
 
-# ── Auto-refresh trigger ──────────────────────────────────────────────────────
+# ── Auto-refresh trigger (non-blocking — doesn't freeze the UI/dropdowns) ─────
 if auto_refresh:
-    _time.sleep(60)
-    st.cache_data.clear()
-    st.rerun()
+    from streamlit_autorefresh import st_autorefresh
+    st_autorefresh(interval=60_000, key="zoro_autorefresh")
