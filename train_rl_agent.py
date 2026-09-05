@@ -167,26 +167,17 @@ def evaluate_on_coin(model, df: pd.DataFrame, n_episodes: int = 5) -> dict:
     if not all_returns:
         return {"win_rate": 0.0, "avg_return": 0.0, "sharpe": 0.0, "trades": 0}
 
-        if not all_returns:
-        return {"win_rate": 0.0, "avg_return": 0.0, "sharpe": 0.0, "trades": 0}
-
     r = np.array(all_returns)
     if len(r) < 2:
         sharpe = 0.0
-    else:
+        else:
         sharpe = r.mean() / (r.std() + 1e-8)
-    return {
-        "win_rate":   win_count / trade_count,
-        "avg_return": float(r.mean()),
-        "sharpe":     float(sharpe),
-        "trades":     trade_count,
-    }
-    return {
-        "win_rate":   win_count / trade_count,
-        "avg_return": float(r.mean()),
-        "sharpe":     float(sharpe),
-        "trades":     trade_count,
-    }
+        return {
+            "win_rate":   win_count / trade_count,
+            "avg_return": float(r.mean()),
+            "sharpe":     float(sharpe),
+            "trades":     trade_count,
+}
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
