@@ -419,8 +419,9 @@ def api_status():
 @st.cache_data(ttl=30)
 def api_backtest():
     """Real endpoint from api.py — NOTE: despite the name, this is LIVE paper
-    trading P&L from PostgreSQL, not a historical simulation (api.py says so
-    explicitly). Kept separate from the historical vectorbt bt_raw table."""
+    trading P&L(SQLite on Hugging Face, PostgreSQL if running locally),
+    not a historical simulation. Kept separate from the historical vectorbt
+    bt_raw table."""
     try:
         r = _req.get(f"{API_BASE}/backtest", timeout=5)
         if r.ok: return r.json()
@@ -584,12 +585,12 @@ with t1:
     col_arch, col_up = st.columns([2,1])
     with col_arch:
         st.code("""
-┌── DATA LAYER ──────────┬── AI LAYER ─────────────┬── EXECUTION LAYER ────────────┐
-│  yfinance (1H OHLC)    │  LSTM 3-layer (60h seq)  │  7-Gate Signal Engine          │
-│  Binance WebSocket     │  PPO RL Agent (300k)     │  RSI 25/75 thresholds          │
-│  FinBERT RSS news      │  SHAP Explainability     │  ATR stop-loss 1.5×            │
-│  PostgreSQL store      │  53.3% directional acc.  │  Trailing stop 2.0×            │
-└────────────────────────┴─────────────────────────┴───────────────────────────────┘
+┌── DATA LAYER ──────────┬── AI LAYER  ─────────────┬──EXECUTION LAYER ────────────┐
+│  yfinance (1H OHLC)    │  LSTM 3-layer (60h seq)  │  7-Gate Signal Engine        │
+│  Binance WebSocket     │  PPO RL Agent (300k)     │  RSI 25/75 thresholds        │
+│  FinBERT RSS news      │  SHAP Explainability     │  ATR stop-loss 1.5×          │
+│  SQLite/PostgreSQL     │  53.3% directional acc.  │  Trailing stop 2.0×          │
+└────────────────────────┴──────────────────────────└──────────────────────────────┴
           ↓                           ↓                             ↓
   ┌──────────────────────────────────────────────────────────────────────────┐
   │   FastAPI :8000  ·  Streamlit KATANA  ·  Docker  ·  Hugging Face Spaces │
