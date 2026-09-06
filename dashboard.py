@@ -12,16 +12,11 @@ from datetime import datetime
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# ── Start the live trading system (scanner + alerts + API) ─────────────────────
-# st.cache_resource ensures this runs ONCE per server process, no matter how
-# many browser tabs/visitors load the page.
-@st.cache_resource
-def _boot_live_system():
-    from zoro.live_runner import start_live_system
-    start_live_system()
-    return True
-
-_boot_live_system()
+# NOTE: the live trading scanner runs as its own separate process (trader.py,
+# launched by start.sh) — NOT from here. Do not re-add a live_runner boot call
+# in this file; running the scanner both here AND as trader.py causes a
+# duplicate scanner: double DB writes and duplicate Telegram/email alerts for
+# the same signal.
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(

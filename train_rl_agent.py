@@ -146,36 +146,41 @@ def make_multi_env(coin_data: dict[str, pd.DataFrame], n_envs: int):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def evaluate_on_coin(model, df: pd.DataFrame, n_episodes: int = 5) -> dict:
-    """Evaluate agent on a single coin's test slice."""
+    """Evaluate agent on a single coin's test slice.
+
+    IMPORTANT: we read raw per-trade returns from env.trade_returns, NOT the
+    step reward. The environment's reward (see gym_env._sharpe_reward) is
+    itself an already-annualized, clipped Sharpe-like value used for reward
+    shaping during training. Treating that reward as a raw trade return here
+    — even without re-annualizing it — still isn't a real Sharpe ratio of
+    actual returns; it's the Sharpe of an already-transformed signal. This
+    computes it correctly from actual per-trade percentage returns.
+    """
     sys.path.insert(0, SCRIPT_DIR)
     from gym_env import ZoroCryptoEnv
 
-    env = ZoroCryptoEnv(df, window_size=min(WINDOW_SIZE, len(df) - 1))
-    all_returns, win_count, trade_count = [], 0, 0
+    all_returns = []
 
     for _ in range(n_episodes):
+        env = ZoroCryptoEnv(df, window_size=min(WINDOW_SIZE, len(df) - 1))
         obs, _ = env.reset()
         done = False
         while not done:
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, done, _, _ = env.step(int(action))
-            if reward != 0.0:
-                all_returns.append(reward)
-                win_count   += 1 if reward > 0 else 0
-                trade_count += 1
+        all_returns.extend(env.trade_returns)  # raw per-trade % returns
 
     if not all_returns:
         return {"win_rate": 0.0, "avg_return": 0.0, "sharpe": 0.0, "trades": 0}
 
     r = np.array(all_returns)
-    if len(r) < 2:
-        sharpe = 0.0
-    else:
-        sharpe = r.mean() / (r.std() + 1e-8)
+    win_count = int((r > 0).sum())
+    trade_count = len(r)
+    sharpe = (r.mean() / (r.std() + 1e-8)) * np.sqrt(252 * 24) if trade_count >= 2 else 0.0
     return {
         "win_rate":   win_count / trade_count,
         "avg_return": float(r.mean()),
-        "sharpe":     float(sharpe),
+        "sharpe":     float(np.clip(sharpe, -10.0, 10.0)),  # sane display bound
         "trades":     trade_count,
     }
 
