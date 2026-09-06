@@ -17,11 +17,11 @@ app_port: 7860
 
 ## Overview
 
-ZORO is an automated crypto **paper trading** system that combines a Reinforcement Learning agent (PPO), an LSTM price-direction model, and FinBERT news sentiment into a single signal engine, monitoring 5 coins in real time.
+ZORO is an automated crypto **paper trading** system that combines a Reinforcement Learning agent (PPO), an LSTM price-direction model, and FinBERT news sentiment into a single signal engine, monitoring 5 coins in real time. Binance Testnet API credentials are present in configuration for planned future order-execution work but are not yet wired into the trading loop — all trades today are simulated, not sent to any exchange.
 
-It is built as a full-stack ML system, not a script: FastAPI backend, SQLite persistence, SHAP-based explainability, and a live Streamlit terminal deployed on Hugging Face Spaces.
+It is built as a full-stack ML system, not a script: FastAPI backend, PostgreSQL persistence, SHAP-based explainability, and a live Streamlit terminal deployed on Hugging Face Spaces.
 
-**All trades are simulated (paper trading). No real orders are placed on any exchange, and no real funds are used or at risk anywhere in this project.** Binance Testnet API credentials are present in configuration for planned future order-execution work but are not yet wired into the trading loop.
+**No real funds are used or at risk anywhere in this project.**
 
 ---
 

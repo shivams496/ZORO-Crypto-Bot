@@ -797,7 +797,7 @@ with t3:
 with t4:
     # ── Section A: REAL live paper-trading P&L (from /backtest — misleadingly
     # named in api.py, but its own docstring confirms it's live DB data) ───────
-    st.markdown('<div class="st2">LIVE PAPER-TRADING P&L (REAL — FROM POSTGRESQL, NOT A SIMULATION)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="st2">LIVE PAPER-TRADING P&L (REAL — FROM DATABASE, NOT A SIMULATION)</div>', unsafe_allow_html=True)
     live_bt = api_backtest()
     if live_bt and live_bt.get("coins"):
         st.markdown(f'<span class="live-pill"><span class="live-dot" style="width:6px;height:6px"></span>LIVE — generated {live_bt.get("generated_at","")[:19]}</span>', unsafe_allow_html=True)
@@ -807,7 +807,8 @@ with t4:
         st.markdown("""
         <div class="warn-box">
         No live P&L data yet — this needs <code>trader.py</code> running and writing trades
-        to PostgreSQL. Until then there's nothing real to show here (no placeholder numbers
+        to the database (SQLite on Hugging Face, PostgreSQL if running locally via
+        docker-compose). Until then there's nothing real to show here (no placeholder numbers
         are substituted).
         </div>""", unsafe_allow_html=True)
 
